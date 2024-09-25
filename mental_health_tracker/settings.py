@@ -28,7 +28,6 @@ SECRET_KEY = "django-insecure-grj2x1u&vm(etm58il3xk=9lkj5@m#r(k8#nd4+!#w8po$2dky
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
-
 ALLOWED_HOSTS = ["localhost", "127.0.0.1","muhammad-brian31-mentalhealthtracker.pbp.cs.ui.ac.id"]
 
 
@@ -52,6 +51,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Add it directly under SecurityMiddleware
 ]
 
 ROOT_URLCONF = "mental_health_tracker.urls"
@@ -119,8 +120,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static' # refers to /static root project in development mode
+    ]
+else:
+    STATIC_ROOT = BASE_DIR / 'static' # refers to /static root project in production mode
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
